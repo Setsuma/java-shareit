@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.storage;
 
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.exception.EmailAlreadyExistsException;
 import ru.practicum.shareit.exception.IdNotFoundException;
 import ru.practicum.shareit.user.model.User;
 
@@ -25,16 +26,19 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public User updateUser(User user) {
-        checkEmail(user);
         User updateUser = users.get(user.getId());
-        if (user.getEmail() != null) updateUser.setEmail(user.getEmail());
-        if (user.getName() != null) updateUser.setName(user.getName());
-        users.put(updateUser.getId(), updateUser);
-        return users.get(updateUser.getId());
+        if (updateUser != null) {
+            checkEmail(user);
+            if (user.getEmail() != null) updateUser.setEmail(user.getEmail());
+            if (user.getName() != null) updateUser.setName(user.getName());
+            return users.get(updateUser.getId());
+        } else {
+            throw new IdNotFoundException("Пользователь с данный Id не был найден");
+        }
     }
 
     public User getUserById(long userId) {
-        if (users.get(userId) == null) throw new IdNotFoundException("Пользователь с данный Id не был найдена");
+        if (users.get(userId) == null) throw new IdNotFoundException("Пользователь с данный Id не был найден");
         return users.get(userId);
     }
 
@@ -45,7 +49,7 @@ public class InMemoryUserStorage implements UserStorage {
     private void checkEmail(User user) {
         for (User existUser : users.values()) {
             if (existUser.getId() != user.getId() && user.getEmail() != null && existUser.getEmail().equals(user.getEmail())) {
-                throw new RuntimeException("Пользователь с такой почтой уже существует");
+                throw new EmailAlreadyExistsException("Пользователь с такой почтой уже существует");
             }
         }
     }

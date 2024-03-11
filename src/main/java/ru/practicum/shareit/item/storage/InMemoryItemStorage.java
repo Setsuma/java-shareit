@@ -28,14 +28,13 @@ public class InMemoryItemStorage implements ItemStorage {
 
     public Item updateItem(Item item, long userId, long itemId) {
         Item updateItem = items.get(itemId);
-        if (updateItem.getOwner().getId() == userId) {
+        if (updateItem != null && updateItem.getOwner().getId() == userId) {
             if (item.getName() != null) updateItem.setName(item.getName());
             if (item.getDescription() != null) updateItem.setDescription(item.getDescription());
             if (item.getAvailable() != null) updateItem.setAvailable(item.getAvailable());
         } else {
             throw new IdNotFoundException("Вещь пользователя с данным Id не найдена");
         }
-        items.put(updateItem.getId(), updateItem);
         return updateItem;
     }
 

@@ -13,4 +13,10 @@ public class ErrorHandler {
     public ErrorResponse handleIdNotFoundException(IdNotFoundException e) {
         return new ErrorResponse("IdNotFound error", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ErrorResponse handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
+        return new ErrorResponse("EmailAlreadyExists error", e.getMessage());
+    }
 }
