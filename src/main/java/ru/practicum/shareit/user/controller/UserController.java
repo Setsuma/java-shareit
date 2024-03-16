@@ -24,18 +24,18 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@Validated(AdvanceInfo.class) @RequestBody UserDto user,
-                                              @PathVariable int userId) {
+                                              @PathVariable long userId) {
         return ResponseEntity.ok(userService.updateUser(user, userId));
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable int userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok("the user has been successfully deleted");
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable int userId) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
