@@ -56,18 +56,19 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemWithBookingAndCommentsDto> getAllUserItems(long userId) {
         List<Item> items = itemRepository.findByOwner_Id(userId);
         List<ItemWithBookingAndCommentsDto> dtoItems = new ArrayList<>();
+        List<Comment> comments = commentRepository.findByItemIn(items);
         for (Item item : items) {
             ItemWithBookingAndCommentsDto dtoItem = mapper.map(item, ItemWithBookingAndCommentsDto.class);
             List<Booking> lastBooking = bookingRepository.findLastBooking(item, LocalDateTime.now(), PageRequest.of(0, 1));
             List<Booking> nextBooking = bookingRepository.findNextBooking(item, LocalDateTime.now(), PageRequest.of(0, 1));
-            List<CommentOutputDto> comments = commentRepository.findAllByItem(item).stream()
-                    .map(comment -> mapper.map(comment, CommentOutputDto.class))
-                    .collect(Collectors.toList());
             if (lastBooking.isEmpty()) dtoItem.setLastBooking(null);
             else dtoItem.setLastBooking(mapper.map(lastBooking.get(0), BookingForItemDto.class));
             if (nextBooking.isEmpty()) dtoItem.setNextBooking(null);
             else dtoItem.setNextBooking(mapper.map(nextBooking.get(0), BookingForItemDto.class));
-            dtoItem.setComments(comments);
+            dtoItem.setComments(comments.stream()
+                    .filter(comment -> comment.getItem().equals(item))
+                    .map(comment -> mapper.map(comment, CommentOutputDto.class))
+                    .collect(Collectors.toList()));
             dtoItems.add(dtoItem);
         }
         return dtoItems;
@@ -103,12 +104,10 @@ public class ItemServiceImpl implements ItemService {
     public CommentOutputDto createComment(CommentDto commentDto, long userId, long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new IdNotFoundException("Предмет не найден"));
         User user = userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException("Пользователь не найден"));
-        LocalDateTime nowDateTime = LocalDateTime.now();
-        if (bookingRepository.existBooking(user, item, nowDateTime)) {
+        if (bookingRepository.existBooking(user, item, LocalDateTime.now())) {
             Comment comment = mapper.map(commentDto, Comment.class);
             comment.setItem(item);
             comment.setAuthor(user);
-            comment.setCreatedDate(nowDateTime);
             return mapper.map(commentRepository.save(comment), CommentOutputDto.class);
         } else throw new UnavailableException("Отзывы могут оставлять только те люди, которые уже пользовались вещью");
     }

@@ -19,7 +19,7 @@ public class Item {
     private long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
     @Column(name = "is_available", nullable = false)
     private Boolean available;

@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingOutputDto;
@@ -77,38 +78,39 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingOutputDto> getAllUserBooking(long userId, BookingState state) {
         final LocalDateTime nowDateTime = LocalDateTime.now();
+        Sort newestFirst = Sort.by(Sort.Direction.DESC, "start");
         User booker = userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException("Пользователь не нейден"));
         List<Booking> result = new ArrayList<>();
 
         switch (state) {
             case ALL: {
-                result = bookingRepository.findAllByBookerOrderByStartDesc(booker);
+                result = bookingRepository.findAllByBooker(booker, newestFirst);
                 break;
             }
             case CURRENT: {
                 result = bookingRepository.findAllBookingsForBookerWithStartAndEnd(
-                        booker, nowDateTime);
+                        booker, nowDateTime, newestFirst);
                 break;
             }
             case PAST: {
-                result = bookingRepository.findAllByBookerAndEndIsBeforeOrderByStartDesc(
-                        booker, nowDateTime);
+                result = bookingRepository.findAllByBookerAndEndIsBefore(
+                        booker, nowDateTime, newestFirst);
                 break;
             }
             case FUTURE: {
-                result = bookingRepository.findAllByBookerAndStartIsAfterOrderByStartDesc(
-                        booker, nowDateTime);
+                result = bookingRepository.findAllByBookerAndStartIsAfter(
+                        booker, nowDateTime, newestFirst);
                 break;
             }
             case WAITING: {
-                result = bookingRepository.findAllByBookerAndStatusEqualsOrderByStartDesc(
-                        booker, BookingStatus.WAITING);
+                result = bookingRepository.findAllByBookerAndStatusEquals(
+                        booker, BookingStatus.WAITING, newestFirst);
                 break;
             }
             case REJECTED: {
-                result = bookingRepository.findAllByBookerAndStatusEqualsOrderByStartDesc(
-                        booker, BookingStatus.REJECTED);
+                result = bookingRepository.findAllByBookerAndStatusEquals(
+                        booker, BookingStatus.REJECTED, newestFirst);
             }
         }
         return result.stream()
@@ -119,35 +121,39 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingOutputDto> getOwnerBooking(long userId, BookingState state) {
         final LocalDateTime nowDateTime = LocalDateTime.now();
+        Sort newestFirst = Sort.by(Sort.Direction.DESC, "start");
         User booker = userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException("Пользователь не нейден"));
         List<Booking> result = new ArrayList<>();
 
         switch (state) {
             case ALL: {
-                result = bookingRepository.findAllByItem_OwnerOrderByStartDesc(booker);
+                result = bookingRepository.findAllByItem_Owner(booker, newestFirst);
                 break;
             }
             case CURRENT: {
-                result = bookingRepository.findAllBookingsItemByForOwnerWithStartAndEnd(booker, nowDateTime);
+                result = bookingRepository.findAllBookingsItemByForOwnerWithStartAndEnd(booker,
+                        nowDateTime, newestFirst);
                 break;
             }
             case PAST: {
-                result = bookingRepository.findAllByItem_OwnerAndEndIsBeforeOrderByStartDesc(booker, nowDateTime);
+                result = bookingRepository.findAllByItem_OwnerAndEndIsBefore(booker,
+                        nowDateTime, newestFirst);
                 break;
             }
             case FUTURE: {
-                result = bookingRepository.findAllByItem_OwnerAndStartIsAfterOrderByStartDesc(booker, nowDateTime);
+                result = bookingRepository.findAllByItem_OwnerAndStartIsAfter(booker,
+                        nowDateTime, newestFirst);
                 break;
             }
             case WAITING: {
-                result = bookingRepository.findAllByItem_OwnerAndStatusEqualsOrderByStartDesc(
-                        booker, BookingStatus.WAITING);
+                result = bookingRepository.findAllByItem_OwnerAndStatusEquals(
+                        booker, BookingStatus.WAITING, newestFirst);
                 break;
             }
             case REJECTED: {
-                result = bookingRepository.findAllByItem_OwnerAndStatusEqualsOrderByStartDesc(
-                        booker, BookingStatus.REJECTED);
+                result = bookingRepository.findAllByItem_OwnerAndStatusEquals(
+                        booker, BookingStatus.REJECTED, newestFirst);
             }
         }
         return result.stream()
