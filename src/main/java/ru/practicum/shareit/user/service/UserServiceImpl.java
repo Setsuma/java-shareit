@@ -24,7 +24,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto updateUser(UserDto userDto, long userId) {
-        User existingUser = userRepository.findById(userId).get();
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("Пользователь не найден"));
         if (userDto.getName() != null) existingUser.setName(userDto.getName());
         if (userDto.getEmail() != null) existingUser.setEmail(userDto.getEmail());
         return mapper.map(userRepository.save(existingUser), UserDto.class);

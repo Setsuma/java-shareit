@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking.dto;
 
-import lombok.Data;
+import lombok.*;
 import ru.practicum.shareit.booking.validator.CorrectDate;
 
 import javax.validation.constraints.Future;
@@ -8,7 +8,12 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
 @CorrectDate(startDate = "start", endDate = "end")
 public class BookingDto {
     @NotNull(message = "id предмета не может быть пустым")
