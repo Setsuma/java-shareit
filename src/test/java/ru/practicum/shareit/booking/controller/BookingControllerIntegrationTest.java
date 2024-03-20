@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookingController.class)
@@ -87,52 +88,19 @@ public class BookingControllerIntegrationTest {
         assertEquals(objectMapper.writeValueAsString(bookingOutputDto), result);
     }
 
-//    @SneakyThrows
-//    @Test
-//    void add_whenEndTimeBeforeStartTime_returnValidateException() {
-//        BookingForResponse bookingDto1ForResponse = BookingForResponse.builder()
-//                .id(1L)
-//                .startTime(now.plusDays(2))
-//                .endTime(now.plusDays(1))
-//                .item(itemForResponseDtoMapper.mapToDto(item1))
-//                .booker(userOnlyWithIdDtoMapper.mapToDto(booker101))
-//                .status(BookingStatus.WAITING).build();
-//
-//        bookingDtoForCreate = BookingDto.builder()
-//                .id(1L)
-//                .itemId(1L)
-//                .booker(UserForResponseDto.builder().id(booker101.getId()).name(booker101.getName()).build())
-//                .startTime(bookingDto1ForResponse.getStartTime())
-//                .endTime(bookingDto1ForResponse.getEndTime())
-//                .bookingStatus(BookingStatus.WAITING)
-//                .build();
-//
-//        Booking booking = Booking.builder()
-//                .id(bookingDtoForCreate.getId())
-//                .item(item1)
-//                .booker(booker101)
-//                .startTime(bookingDtoForCreate.getStartTime())
-//                .endTime(bookingDtoForCreate.getEndTime())
-//                .bookingStatus(bookingDtoForCreate.getBookingStatus())
-//                .build();
-//
-//        item1.setBookings(List.of(booking));
-////        when(itemRepositoryJpa.findById(any())).thenReturn(Optional.of(item1));
-////        when(userRepositoryJpa.findById(any())).thenReturn(Optional.of(booker101));
-//        when(bookingService.createBooking(any(), any())).thenThrow(ValidateException.class);
-//
-//        String result = mockMvc.perform(post("/bookings")
-//                        .header("X-Sharer-User-Id", booker101.getId())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(bookingDtoForCreate)))
-//
-//                .andExpect(status().isBadRequest())
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//
-//        assertEquals("Error messagenull", result);
-//    }
+    @SneakyThrows
+    @Test
+    void add_whenEndTimeBeforeStartTime_returnValidateException() {
+        BookingDto booking = bookingDto.toBuilder().start(LocalDateTime.now().plusDays(100)).build();
+
+        mockMvc.perform(post("/bookings")
+                        .header("X-Sharer-User-Id", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(booking)))
+
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Validation error"));
+    }
 
     @SneakyThrows
     @Test
