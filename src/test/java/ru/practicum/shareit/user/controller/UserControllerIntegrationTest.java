@@ -154,8 +154,8 @@ public class UserControllerIntegrationTest {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", hasSize(2))).
-                andExpect(jsonPath("$[0].id").value(userDto1.getId()))
+                .andExpect(jsonPath("$.*", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(userDto1.getId()))
                 .andExpect(jsonPath("$[0].name").value(userDto1.getName()))
                 .andExpect((jsonPath("$[0].email").value(userDto1.getEmail())))
                 .andExpect(jsonPath("$[1].id").value(userDto2.getId()))
