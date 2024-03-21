@@ -1,0 +1,23 @@
+{
+  "id": 1,
+  "start": "2024-01-21T10:10:10",
+  "end": "2024-01-22T10:10:10",
+  "status": "WAITING",
+  "item": {
+    "id": 1,
+    "name": "item",
+    "description": "item desc",
+    "available": true,
+    "owner": {
+      "id": 1,
+      "name": "owner",
+      "email": "owner@yandex.com"
+    },
+    "request": null
+  },
+  "booker": {
+    "id": 2,
+    "name": "booker",
+    "email": "booker@yandex.com"
+  }
+}
