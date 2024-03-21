@@ -33,7 +33,7 @@ public class BookingJsonTest {
     }
 
     @Test
-    void serialize() throws Exception {
+    void serializeBookingOutputDtoTest() throws Exception {
         BookingOutputDto bookingOutputDto = BookingOutputDto.builder()
                 .id(1)
                 .start(LocalDateTime.parse("2024-01-21T10:10:10"))
@@ -44,8 +44,8 @@ public class BookingJsonTest {
                         .name("item")
                         .description("item desc")
                         .available(true)
-                        .owner(User.builder().
-                                id(1L)
+                        .owner(User.builder()
+                                .id(1L)
                                 .name("owner")
                                 .email("owner@yandex.com")
                                 .build())
