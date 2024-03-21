@@ -14,11 +14,12 @@ public class CommentToCommentOutputDto extends ConverterConfigurer<Comment, Comm
         return new AbstractConverter<Comment, CommentOutputDto>() {
             @Override
             protected CommentOutputDto convert(Comment source) {
-                CommentOutputDto destination = new CommentOutputDto();
-                destination.setId(source.getId());
-                destination.setText(source.getText());
-                destination.setAuthorName(source.getAuthor().getName());
-                destination.setCreated(source.getCreatedDate());
+                CommentOutputDto destination = CommentOutputDto.builder()
+                        .id(source.getId())
+                        .text(source.getText())
+                        .authorName(source.getAuthor().getName())
+                        .created(source.getCreatedDate())
+                        .build();
                 return destination;
             }
         };

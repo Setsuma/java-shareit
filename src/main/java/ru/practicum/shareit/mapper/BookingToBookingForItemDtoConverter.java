@@ -14,12 +14,13 @@ public class BookingToBookingForItemDtoConverter extends ConverterConfigurer<Boo
         return new AbstractConverter<Booking, BookingForItemDto>() {
             @Override
             protected BookingForItemDto convert(Booking source) {
-                BookingForItemDto destination = new BookingForItemDto();
-                destination.setId(source.getId());
-                destination.setStart(source.getStart());
-                destination.setEnd(source.getEnd());
-                destination.setBookerId(source.getBooker().getId());
-                destination.setStatus(source.getStatus());
+                BookingForItemDto destination = BookingForItemDto.builder()
+                        .id(source.getId())
+                        .start(source.getStart())
+                        .end(source.getEnd())
+                        .bookerId(source.getBooker().getId())
+                        .status(source.getStatus())
+                        .build();
                 return destination;
             }
         };
