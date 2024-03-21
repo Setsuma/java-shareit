@@ -14,9 +14,10 @@ public class BookingDtoToBookingConverter extends ConverterConfigurer<BookingDto
         return new AbstractConverter<BookingDto, Booking>() {
             @Override
             protected Booking convert(BookingDto source) {
-                Booking destination = new Booking();
-                destination.setStart(source.getStart());
-                destination.setEnd(source.getEnd());
+                Booking destination = Booking.builder()
+                        .start(source.getStart())
+                        .end(source.getEnd())
+                        .build();
                 return destination;
             }
         };

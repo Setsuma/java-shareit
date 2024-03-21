@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -32,6 +33,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ModelMapper mapper;
@@ -78,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
             else dtoItem.setLastBooking(mapper.map(lastBooking.get(0), BookingForItemDto.class));
             if (nextBooking.isEmpty()) dtoItem.setNextBooking(null);
             else dtoItem.setNextBooking(mapper.map(nextBooking.get(0), BookingForItemDto.class));
-            if (comments.isEmpty()) dtoItem.setComments(null);
+            if (comments.get(item) == null) dtoItem.setComments(Collections.emptyList());
             else dtoItem.setComments(comments.get(item).stream()
                     .map(comment -> mapper.map(comment, CommentOutputDto.class))
                     .collect(toList()));
