@@ -51,8 +51,8 @@ public class BookingJsonTest {
                                 .build())
                         .request(null)
                         .build())
-                .booker(User.builder().
-                        id(2L)
+                .booker(User.builder()
+                        .id(2L)
                         .name("booker")
                         .email("booker@yandex.com")
                         .build())
