@@ -517,4 +517,12 @@ class BookingServiceImplTest {
         assertEquals(rejectedBooking.getEnd(), result.get(0).getEnd());
         assertEquals(rejectedBooking.getStatus(), result.get(0).getStatus());
     }
+
+    @Test
+    void bookingToBookingDtoConverterTest() {
+        BookingDto newDto = mapper.map(booking, BookingDto.class);
+        assertEquals(newDto.getItemId(), booking.getItem().getId());
+        assertEquals(newDto.getStart(), booking.getStart());
+        assertEquals(newDto.getEnd(), booking.getEnd());
+    }
 }
