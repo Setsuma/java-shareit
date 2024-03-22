@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
@@ -66,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
 
     public List<ItemWithBookingAndCommentsDto> getAllUserItems(long userId, int from, int size) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException("Пользователь не найден"));
-        Pageable pageable = PageRequest.of(from / size, size);
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.ASC, "id"));
         List<Item> items = itemRepository.findByOwner_Id(user.getId(), pageable);
         List<ItemWithBookingAndCommentsDto> dtoItems = new ArrayList<>();
         Map<Item, List<Comment>> comments = commentRepository.findByItemIn(items)
