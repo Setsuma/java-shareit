@@ -17,12 +17,12 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> createUser(@Validated(BasicInfo.class) @RequestBody UserDto user) {
-       return userService.createUser(user);
+        return userService.createUser(user);
     }
 
     @PatchMapping("/{userId}")
     public ResponseEntity<Object> updateUser(@Validated(AdvanceInfo.class) @RequestBody UserDto user,
-                                              @PathVariable long userId) {
+                                             @PathVariable long userId) {
         return userService.updateUser(userId, user);
     }
 

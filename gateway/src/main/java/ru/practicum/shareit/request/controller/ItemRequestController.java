@@ -6,13 +6,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.client.RequestClient;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
-import ru.practicum.shareit.request.dto.ItemRequestOutputDto;
-import ru.practicum.shareit.request.dto.ItemRequestWithAnswersDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +40,7 @@ public class ItemRequestController {
 
     @GetMapping("{requestId}")
     public ResponseEntity<Object> getItemRequestById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                        @PathVariable Long requestId) {
+                                                     @PathVariable Long requestId) {
         return itemRequestService.getItemRequestById(userId, requestId);
     }
 }

@@ -23,7 +23,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ResponseEntity<ItemRequestOutputDto> addItemRequest(@RequestBody @Valid ItemRequestDto itemRequestDto,
-                                         @RequestHeader(value = "X-Sharer-User-Id") Long requesterId) {
+                                                               @RequestHeader(value = "X-Sharer-User-Id") Long requesterId) {
         return ResponseEntity.ok(itemRequestService.addItemRequest(itemRequestDto, requesterId));
     }
 
@@ -43,7 +43,7 @@ public class ItemRequestController {
 
     @GetMapping("{requestId}")
     public ResponseEntity<ItemRequestWithAnswersDto> getItemRequestById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                        @PathVariable Long requestId) {
+                                                                        @PathVariable Long requestId) {
         return ResponseEntity.ok(itemRequestService.getItemRequestById(userId, requestId));
     }
 }

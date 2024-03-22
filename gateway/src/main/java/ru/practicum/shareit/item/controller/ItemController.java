@@ -51,7 +51,7 @@ public class ItemController {
                                                  @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                  @Positive @RequestParam(name = "size", defaultValue = "20") Integer size,
                                                  @RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.getSearchItems(userId,from, size, text);
+        return itemService.getSearchItems(userId, from, size, text);
     }
 
     @PostMapping("/{itemId}/comment")
