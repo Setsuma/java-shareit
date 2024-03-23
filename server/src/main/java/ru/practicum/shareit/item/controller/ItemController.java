@@ -39,15 +39,15 @@ public class ItemController {
     @GetMapping
     public ResponseEntity<List<ItemWithBookingAndCommentsDto>> getAllUserItems(
             @RequestHeader("X-Sharer-User-Id") long userId,
-            @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @RequestParam(name = "size", defaultValue = "20") Integer size) {
+            @RequestParam(name = "from") Integer from,
+            @RequestParam(name = "size") Integer size) {
         return ResponseEntity.ok(itemService.getAllUserItems(userId, from, size));
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemDto>> getSearchItems(@RequestParam String text,
-                                                        @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                                        @RequestParam(name = "size", defaultValue = "20") Integer size) {
+                                                        @RequestParam(name = "from") Integer from,
+                                                        @RequestParam(name = "size") Integer size) {
         return ResponseEntity.ok(itemService.getSearchItems(text, from, size));
     }
 

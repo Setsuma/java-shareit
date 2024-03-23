@@ -41,8 +41,8 @@ public class BookingController {
     public ResponseEntity<List<BookingOutputDto>> getAllUserBooking(
             @RequestHeader("X-Sharer-User-Id") long userId,
             @RequestParam(defaultValue = "ALL") BookingState state,
-            @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @RequestParam(name = "size", defaultValue = "20") Integer size) {
+            @RequestParam(name = "from") Integer from,
+            @RequestParam(name = "size") Integer size) {
         return ResponseEntity.ok(bookingService.getAllUserBooking(userId, state, from, size));
     }
 
@@ -50,8 +50,8 @@ public class BookingController {
     public ResponseEntity<List<BookingOutputDto>> getOwnerBooking(
             @RequestHeader("X-Sharer-User-Id") long userId,
             @RequestParam(defaultValue = "ALL") BookingState state,
-            @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @RequestParam(name = "size", defaultValue = "20") Integer size) {
+            @RequestParam(name = "from") Integer from,
+            @RequestParam(name = "size") Integer size) {
         return ResponseEntity.ok(bookingService.getOwnerBooking(userId, state, from, size));
     }
 }
